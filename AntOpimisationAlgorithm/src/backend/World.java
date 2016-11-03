@@ -61,14 +61,14 @@ public class World {
 		for (int i = 0; i < nodeList.size(); i++) {
 			Node node = nodeList.get(i);
 			for (Node neighbourNode: nodeList) {
-				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neighbours.contains(node)) {
-					node.neighbours.add(neighbourNode);
-					neighbourNode.neighbours.add(node);
+				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neightbours.containsKey(node)) {
+					node.neightbours.put(neighbourNode, 0);
+					neighbourNode.neightbours.put(node, 0);
 					gc.setFill(Color.BLACK);
 					gc.strokeLine(node.x + 15, node.y + 15, neighbourNode.x + 15, neighbourNode.y + 15);
 				}
 			}
-			if (node.neighbours.isEmpty()) {
+			if (node.neightbours.isEmpty()) {
 				linkDistance += 50;
 				i--;
 			} else {

@@ -1,6 +1,7 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -8,7 +9,8 @@ import javafx.scene.paint.Color;
 public class Node {
 	int x, y;
 	String type;
-	ArrayList<Node> neighbours = new ArrayList<Node>();
+	HashMap<Node, Integer> neightbours = new HashMap<Node, Integer>();
+	//ArrayList<Node> neighbours = new ArrayList<Node>();
 	
 	public Node(int x, int y, GraphicsContext gc, String type) {
 		this.x = x;
