@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 
 public class World {
 	public ArrayList<Node> nodeList = new ArrayList<Node>();
+	public ArrayList<Ant> antList = new ArrayList<Ant>();
 	
 	int worldWidth, worldHeight, numOfMiddleNodes;
 	GraphicsContext gc;
@@ -75,5 +76,13 @@ public class World {
 				linkDistance = 300;
 			}
 		}
+	}
+	
+	public void addAnt() {
+		antList.add(new Ant(gc, nodeList.get(0)));
+	}
+	
+	public void updateWorld() {
+		
 	}
 }

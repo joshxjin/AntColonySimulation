@@ -3,6 +3,7 @@ package frontend;
 import java.util.ArrayList;
 import java.util.Random;
 
+import backend.Ant;
 import backend.Node;
 import backend.World;
 import javafx.application.Application;
@@ -51,17 +52,39 @@ public class App extends Application {
 	}
 	
 	private void setupRightPanel(VBox rightPanel) {
-		Button btn = new Button();
-        btn.setText("Generate Nodes");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+		Button genNodesBtn = new Button();
+		genNodesBtn.setText("Generate Nodes");
+		genNodesBtn.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
                 generateNodes();
             }
         });
+		
+		Button addAntBtn = new Button();
+		addAntBtn.setText("Add Ant");
+		addAntBtn.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                new Ant(gc, world.nodeList.get(0));
+            }
+        });
+		
+		Button updateWorldBtn = new Button();
+		updateWorldBtn.setText("Update World");
+		updateWorldBtn.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                world.updateWorld();
+            }
+        });
         
-        rightPanel.getChildren().add(btn);
+        rightPanel.getChildren().add(genNodesBtn);
+        rightPanel.getChildren().add(addAntBtn);
+        
 	}
 	
 	private void setupCenterPanel() {
