@@ -1,33 +1,31 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Random;
 
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-
 public class World {
-	public ArrayList<Node> nodeList = new ArrayList<Node>();
-	public ArrayList<Ant> antList = new ArrayList<Ant>();
+	public static ArrayList<Node> nodeList = new ArrayList<Node>();
+	public static ArrayList<Ant> antList = new ArrayList<Ant>();
 	
 	int worldWidth, worldHeight, numOfMiddleNodes;
-	GraphicsContext gc;
 	
 	Random r = new Random();
 	
-	public World(int canvasWidth, int canvasHeight, int numOfMiddleNodes, GraphicsContext gc) {
+	public World(int canvasWidth, int canvasHeight, int numOfMiddleNodes) {
 		this.worldWidth = canvasWidth;
 		this.worldHeight = canvasHeight;
 		this.numOfMiddleNodes = numOfMiddleNodes;
-		this.gc = gc;
 	}
 	
 	
 	public void generateNodes() {
 		nodeList.clear();
-		Node startNode = new Node(50, 50, gc, "start");
+		antList.clear();
+		
+		Node startNode = new Node(50, 50, "start");
 		nodeList.add(startNode);
-		Node endNode = new Node(worldWidth - 50, worldHeight - 50, gc, "end");
+		Node endNode = new Node(worldWidth - 50, worldHeight - 50, "end");
 		nodeList.add(endNode);
 		
 		for (int i = 0; i < numOfMiddleNodes; i++) {
@@ -52,7 +50,7 @@ public class World {
 		if (!validPosition) {
 			generateNextNode(type);
 		} else {
-			Node newNode = new Node(newX, newY, gc, type);
+			Node newNode = new Node(newX, newY, type);
 			nodeList.add(newNode);
 		}
 	}
@@ -65,8 +63,6 @@ public class World {
 				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neightbours.containsKey(node)) {
 					node.neightbours.put(neighbourNode, 0);
 					neighbourNode.neightbours.put(node, 0);
-					gc.setFill(Color.BLACK);
-					gc.strokeLine(node.x + 15, node.y + 15, neighbourNode.x + 15, neighbourNode.y + 15);
 				}
 			}
 			if (node.neightbours.isEmpty()) {
@@ -79,10 +75,32 @@ public class World {
 	}
 	
 	public void addAnt() {
-		antList.add(new Ant(gc, nodeList.get(0)));
+		antList.add(new Ant(nodeList.get(0)));
 	}
 	
+	
 	public void updateWorld() {
-		
+		/*
+		int totalPheromone;
+		for (Ant ant: antList) {
+			totalPheromone = 0;
+			for (Map.Entry<Node, Integer> neighbourNode: ant.currentNode.neightbours.entrySet()) {
+				totalPheromone += neighbourNode.getValue();
+			}
+			
+			int pathValue = r.nextInt(totalPheromone);
+			for (Map.Entry<Node, Integer> neighbourNode: ant.currentNode.neightbours.entrySet()) {
+				pathValue -= neighbourNode.getValue();
+				if (pathValue <= 0) {
+					ant.currentNode.neightbours.put(ant.currentNode, ant.currentNode.neightbours.get(ant.currentNode) + 10);
+					ant.currentNode = neighbourNode.getKey();
+					neighbourNode.setValue(neighbourNode.getValue() + 10);
+					
+					break;
+				}
+			}
+		}
+		*/
 	}
+	
 }

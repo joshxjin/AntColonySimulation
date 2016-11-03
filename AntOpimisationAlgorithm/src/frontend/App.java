@@ -1,6 +1,6 @@
 package frontend;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import backend.Ant;
@@ -10,24 +10,26 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 
 public class App extends Application {
 	final private int CANVAS_WIDTH = 900;
 	final private int CANVAS_HEIGHT = 800;
 	final private int RIGHT_PANEL_WIDTH = 200;
-	final private int MIDDLE_NODES_NUMBER = 15;
-	
-	private GraphicsContext gc;
+	final private int MIDDLE_NODES_NUMBER = 18;
+
+	private Pane centerPanel;
 	private Random r = new Random();
 	private World world;
-	
+	private HashMap<Circle, Ant> liveAntsList = new HashMap<Circle, Ant>();
+		
 	@Override
 	public void start(Stage primaryStage) {
 		
@@ -37,10 +39,9 @@ public class App extends Application {
         setupRightPanel(rightPanel);
         root.setRight(rightPanel);
         
-        Canvas centerPanel = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT); //center panel is Canvas
-        gc = centerPanel.getGraphicsContext2D();
-        world = new World(CANVAS_WIDTH, CANVAS_HEIGHT, MIDDLE_NODES_NUMBER, gc);
+        centerPanel = new Pane(); //center panel is Canvas
         setupCenterPanel();
+        world = new World(CANVAS_WIDTH, CANVAS_HEIGHT, MIDDLE_NODES_NUMBER);
         root.setCenter(centerPanel);
         
 
@@ -68,7 +69,10 @@ public class App extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-                new Ant(gc, world.nodeList.get(0));
+                Ant ant = new Ant(World.nodeList.get(0));
+                Circle circle = new Circle(ant.getCurrentNode().getX(), ant.getCurrentNode().getY(), 5, Color.CHOCOLATE);
+                liveAntsList.put(circle, ant);
+                centerPanel.getChildren().add(circle);
             }
         });
 		
@@ -84,17 +88,38 @@ public class App extends Application {
         
         rightPanel.getChildren().add(genNodesBtn);
         rightPanel.getChildren().add(addAntBtn);
+        rightPanel.getChildren().add(updateWorldBtn);
         
 	}
 	
 	private void setupCenterPanel() {
-		gc.setFill(Color.WHITE);
-		gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		centerPanel.getChildren().clear();
+		centerPanel.setPrefSize(CANVAS_WIDTH, CANVAS_HEIGHT);
+		centerPanel.setStyle("-fx-background-color: white");
 	}
 	
 	private void generateNodes() {
 		setupCenterPanel();
 		world.generateNodes();
+		drawNodes();
+	}
+	
+	private void drawNodes() {
+		for (Node node: World.nodeList) {
+			if (node.getType().equals("start"))
+				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.RED));
+			else if (node.getType().equals("end"))
+				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.BLUE));
+			else
+				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.SANDYBROWN));
+			for (Node neighbour: node.getNeightbours().keySet()) {
+				centerPanel.getChildren().add(new Line(node.getX(), node.getY(), neighbour.getX(), neighbour.getY()));
+			}
+		}
+	}
+	
+	private void drawAnts() {
+		
 	}
 
 	public static void main(String[] args) {
