@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Random;
 
 public class World {
-	final int PHEROMONE_DEC = 10;
-	
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	public static ArrayList<Ant> antList = new ArrayList<Ant>();
 	
@@ -43,7 +41,7 @@ public class World {
 		Boolean validPosition = true;
 		for (Node node: nodeList) {
 			double distance = node.calculateDistance(newX, newY);
-			if (distance <= 150) {
+			if (distance <= Constants.MIN_NODE_DISTANCE) {
 				validPosition = false;
 				break;
 			}
@@ -58,7 +56,7 @@ public class World {
 	}
 	
 	private void generatePaths() {
-		int linkDistance = 270;
+		int linkDistance = Constants.LINK_DISTANCE;
 		for (int i = 0; i < nodeList.size(); i++) {
 			Node node = nodeList.get(i);
 			for (Node neighbourNode: nodeList) {
@@ -68,10 +66,10 @@ public class World {
 				}
 			}
 			if (node.neighbours.isEmpty()) {
-				linkDistance += 50;
+				linkDistance += Constants.LINK_DISTANCE_INC;
 				i--;
 			} else {
-				linkDistance = 270;
+				linkDistance = Constants.LINK_DISTANCE;
 			}
 		}
 	}
@@ -87,9 +85,9 @@ public class World {
 	
 	public void updateWorld() {
 		for (Node node: nodeList) {
-			node.pheromone -= PHEROMONE_DEC;
-			if (node.pheromone <= 1) {
-				node.pheromone = 1;
+			node.pheromone -= Constants.PHEROMONE_DEC;
+			if (node.pheromone <= Constants.MIN_PHEROMONE) {
+				node.pheromone = Constants.MIN_PHEROMONE;
 			}
 		}
 		

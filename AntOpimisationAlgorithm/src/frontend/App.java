@@ -1,16 +1,14 @@
 package frontend;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
 import backend.Ant;
 import backend.Node;
 import backend.World;
-import javafx.animation.Animation.Status;
+import backend.Constants;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -21,7 +19,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -33,7 +30,6 @@ public class App extends Application {
 	final private int CANVAS_WIDTH = 900;
 	final private int CANVAS_HEIGHT = 800;
 	final private int RIGHT_PANEL_WIDTH = 200;
-	final private int MIDDLE_NODES_NUMBER = 16;
 	final private Duration DURATION = Duration.millis(1000);
 
 	private Pane centerPanel;
@@ -55,7 +51,7 @@ public class App extends Application {
         
         centerPanel = new Pane(); //center panel is Canvas
         setupCenterPanel();
-        world = new World(CANVAS_WIDTH, CANVAS_HEIGHT, MIDDLE_NODES_NUMBER);
+        world = new World(CANVAS_WIDTH, CANVAS_HEIGHT, Constants.MIDDLE_NODES_NUMBER);
         root.setCenter(centerPanel);
 
         Scene scene = new Scene(root, CANVAS_WIDTH + RIGHT_PANEL_WIDTH, CANVAS_HEIGHT);
@@ -167,7 +163,7 @@ public class App extends Application {
 			antKeyValues.add(new KeyValue(circle.centerYProperty(), ant.getCurrentNode().getY()));
 		}
 		
-		keyFrame = new KeyFrame(Duration.millis(r.nextInt(1000 - 800) + 800), "moveAnts", onFinished, antKeyValues);
+		keyFrame = new KeyFrame(DURATION, "moveAnts", onFinished, antKeyValues);
 		
 		timeline = new Timeline();
 		timeline.getKeyFrames().add(keyFrame);

@@ -7,7 +7,7 @@ public class Ant {
 	Stack<Node> path = new Stack<Node>();
 	Node currentNode, previousNode;
 	Boolean returning;
-	private static int pathLength = 100;
+	
 	int currentPathLength;
 	
 	public Ant(Node startNode) {
