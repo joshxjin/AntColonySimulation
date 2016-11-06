@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Random;
 
 public class World {
+	final int PHEROMONE_DEC = 10;
+	
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	public static ArrayList<Ant> antList = new ArrayList<Ant>();
 	
@@ -56,51 +58,44 @@ public class World {
 	}
 	
 	private void generatePaths() {
-		int linkDistance = 300;
+		int linkDistance = 270;
 		for (int i = 0; i < nodeList.size(); i++) {
 			Node node = nodeList.get(i);
 			for (Node neighbourNode: nodeList) {
-				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neightbours.containsKey(node)) {
-					node.neightbours.put(neighbourNode, 0);
-					neighbourNode.neightbours.put(node, 0);
+				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neighbours.contains(node)) {
+					node.neighbours.add(neighbourNode);
+					neighbourNode.neighbours.add(node);
 				}
 			}
-			if (node.neightbours.isEmpty()) {
+			if (node.neighbours.isEmpty()) {
 				linkDistance += 50;
 				i--;
 			} else {
-				linkDistance = 300;
+				linkDistance = 270;
 			}
 		}
 	}
 	
-	public void addAnt() {
-		antList.add(new Ant(nodeList.get(0)));
+	public Ant addAnt() {
+		Ant ant = new Ant(nodeList.get(0));
+		
+		antList.add(ant);
+		
+		return ant;
 	}
 	
 	
 	public void updateWorld() {
-		/*
-		int totalPheromone;
-		for (Ant ant: antList) {
-			totalPheromone = 0;
-			for (Map.Entry<Node, Integer> neighbourNode: ant.currentNode.neightbours.entrySet()) {
-				totalPheromone += neighbourNode.getValue();
-			}
-			
-			int pathValue = r.nextInt(totalPheromone);
-			for (Map.Entry<Node, Integer> neighbourNode: ant.currentNode.neightbours.entrySet()) {
-				pathValue -= neighbourNode.getValue();
-				if (pathValue <= 0) {
-					ant.currentNode.neightbours.put(ant.currentNode, ant.currentNode.neightbours.get(ant.currentNode) + 10);
-					ant.currentNode = neighbourNode.getKey();
-					neighbourNode.setValue(neighbourNode.getValue() + 10);
-					
-					break;
-				}
+		for (Node node: nodeList) {
+			node.pheromone -= PHEROMONE_DEC;
+			if (node.pheromone <= 1) {
+				node.pheromone = 1;
 			}
 		}
-		*/
+		
+		for (Ant ant: antList) {
+			ant.move();
+		}
 	}
 	
 }

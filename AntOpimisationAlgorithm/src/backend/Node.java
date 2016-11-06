@@ -1,18 +1,17 @@
 package backend;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Node {
-	int x, y;
+	int x, y, pheromone;
 	String type;
-	HashMap<Node, Integer> neightbours = new HashMap<Node, Integer>();
-	//ArrayList<Node> neighbours = new ArrayList<Node>();
+	ArrayList<Node> neighbours = new ArrayList<Node>();
 	
 	public Node(int x, int y, String type) {
-		this.x = x + 15;
-		this.y = y + 15;
+		this.x = x;
+		this.y = y;
 		this.type = type;
+		this.pheromone = 150;
 	}
 	
 	public double calculateDistance(int x, int y) {
@@ -31,7 +30,7 @@ public class Node {
 		return type;
 	}
 
-	public HashMap<Node, Integer> getNeightbours() {
-		return neightbours;
+	public ArrayList<Node> getNeighbours() {
+		return neighbours;
 	}
 }
