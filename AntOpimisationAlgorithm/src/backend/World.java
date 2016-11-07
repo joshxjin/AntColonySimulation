@@ -84,15 +84,19 @@ public class World {
 	
 	
 	public void updateWorld() {
+		depreciatePheromone();
+		
+		for (Ant ant: antList) {
+			ant.move();
+		}
+	}
+	
+	public void depreciatePheromone() {
 		for (Node node: nodeList) {
 			node.pheromone -= Constants.PHEROMONE_DEC;
 			if (node.pheromone <= Constants.MIN_PHEROMONE) {
 				node.pheromone = Constants.MIN_PHEROMONE;
 			}
-		}
-		
-		for (Ant ant: antList) {
-			ant.move();
 		}
 	}
 	

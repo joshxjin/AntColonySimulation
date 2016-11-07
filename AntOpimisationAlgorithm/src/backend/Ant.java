@@ -7,6 +7,7 @@ public class Ant {
 	Stack<Node> path = new Stack<Node>();
 	Node currentNode, previousNode;
 	Boolean returning;
+	double dx, dy;
 	
 	int currentPathLength;
 	
@@ -19,7 +20,7 @@ public class Ant {
 	
 	public void move() {
 		if (returning) {
-			currentNode.pheromone += 50;
+			currentNode.pheromone += Constants.PHEROMON_INC;
 			currentNode = path.pop();
 			if (currentNode.type.equals("start")) {
 				path.push(currentNode);
@@ -33,7 +34,8 @@ public class Ant {
 				}
 			}
 			Random r = new Random();
-			int randNum = r.nextInt(counter);
+			System.out.println(counter);
+			int randNum = r.nextInt(counter + 1);
 			for (Node node: currentNode.getNeighbours()) {
 				if (previousNode == null || !previousNode.equals(node) && !node.getType().equals("start")) {
 					randNum -= node.pheromone;
@@ -54,4 +56,21 @@ public class Ant {
 	public Node getCurrentNode() {
 		return currentNode;
 	}
+
+	public double getDx() {
+		return dx;
+	}
+
+	public void setDx(double dx) {
+		this.dx = dx;
+	}
+
+	public double getDy() {
+		return dy;
+	}
+
+	public void setDy(double dy) {
+		this.dy = dy;
+	}
+	
 }

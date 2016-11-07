@@ -30,7 +30,7 @@ public class App extends Application {
 	final private int CANVAS_WIDTH = 900;
 	final private int CANVAS_HEIGHT = 800;
 	final private int RIGHT_PANEL_WIDTH = 200;
-	final private Duration DURATION = Duration.millis(1000);
+	final private Duration DURATION = Duration.millis(33); //~30FPS
 
 	private Pane centerPanel;
 	private World world;
@@ -39,6 +39,7 @@ public class App extends Application {
 	private Timeline timeline = new Timeline();
 	private EventHandler onFinished;
 	private Random r = new Random();
+	private int frame = 0;
 		
 	@Override
 	public void start(Stage primaryStage) {
@@ -56,22 +57,39 @@ public class App extends Application {
 
         Scene scene = new Scene(root, CANVAS_WIDTH + RIGHT_PANEL_WIDTH, CANVAS_HEIGHT);
         
-        /*
-        onFinished = new EventHandler<ActionEvent>() {
-        	public void handle(ActionEvent t) {
-        		System.out.println(t.getSource().toString());
-        		animateAnts();
-        	}
-        };
-        */
         
         onFinished = new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent t) {
-        		System.out.println(t.getSource().toString());
-        		//animateAnt(this);
-        		animateAnts();
+        		world.depreciatePheromone();
+        		/*
+        		frame++;
+        		
+        		if (frame >= 30) {
+        			frame = 0;
+        			world.depreciatePheromone();
+        		}
+        		*/
+        		
+        		for (Ant ant: liveAntsList.keySet()) {
+        			Circle circle = liveAntsList.get(ant);
+        			Boolean atX = Math.abs(circle.getCenterX() - ant.getCurrentNode().getX()) <= 2;
+        			Boolean atY = Math.abs(circle.getCenterY() - ant.getCurrentNode().getY()) <= 2;
+        			if (atX && atY) {
+        				ant.move();
+        				ant.setDx((ant.getCurrentNode().getX() - circle.getCenterX()) / 30);
+        				ant.setDy((ant.getCurrentNode().getY() - circle.getCenterY()) / 30);
+        			} else {
+        				circle.setCenterX(circle.getCenterX() + ant.getDx());
+        				circle.setCenterY(circle.getCenterY() + ant.getDy());
+        			}
+        		}
         	}
         };
+        
+        keyFrame = new KeyFrame(DURATION, onFinished);
+        
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.setCycleCount(Timeline.INDEFINITE);
         
         primaryStage.setTitle("Ant Optimisation Algorithm");
         primaryStage.setScene(scene);
@@ -141,13 +159,14 @@ public class App extends Application {
 				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.BLUE));
 			else
 				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.SANDYBROWN));
+			
 			for (Node neighbour: node.getNeighbours()) {
 				centerPanel.getChildren().add(new Line(node.getX(), node.getY(), neighbour.getX(), neighbour.getY()));
 			}
 		}
 	}
 	
-	public void animateAnts() {
+	/*public void animateAnts() {
 		ArrayList<KeyValue> antKeyValues = new ArrayList<KeyValue>();
 		
 		world.updateWorld();
@@ -170,18 +189,9 @@ public class App extends Application {
 		timeline.play();
         
 	}
+	*/
 	
-	public void animateAnt(Ant ant) {
-		ArrayList<KeyValue> antKeyValues = new ArrayList<KeyValue>();
-		
-		//world.updateWorld();
-		
-		Circle circle = liveAntsList.get(ant);
-		
-		keyFrame = new KeyFrame(DURATION, "moveAnts", onFinished, antKeyValues);
-		
-		timeline = new Timeline();
-		timeline.getKeyFrames().add(keyFrame);
+	public void animateAnts() {
 		timeline.play();
 	}
 
