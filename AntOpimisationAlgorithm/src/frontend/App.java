@@ -116,6 +116,8 @@ public class App extends Application {
             	adding50Ants = false;
                 generateNodes();
                 simluateWorldBtn.setDisable(false);
+                addAntsBtn1.setDisable(true);
+            	addAntsBtn2.setDisable(true);
                 timeline.stop();
             }
         });
