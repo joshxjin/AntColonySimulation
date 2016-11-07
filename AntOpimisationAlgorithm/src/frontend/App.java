@@ -40,7 +40,8 @@ public class App extends Application {
 	private EventHandler onFinished;
 	private Random r = new Random();
 	private int counter = 0;
-	private boolean addingAnts = false;
+	private boolean adding50Ants = false;
+	private boolean adding200Ants = false;
 		
 	@Override
 	public void start(Stage primaryStage) {
@@ -63,12 +64,15 @@ public class App extends Application {
         	public void handle(ActionEvent t) {
         		world.depreciatePheromone();
         		
-        		if (addingAnts) {
+        		if (adding50Ants || adding200Ants) {
         			addAnt();
         			counter++;
-        			if (counter >= 50) {
+        			if (adding50Ants && counter >= 50) {
         				counter = 0;
-        				addingAnts = false;
+        				adding50Ants = false;
+        			} else if (adding200Ants && counter >= 200) {
+        				counter = 0;
+        				adding200Ants = false;
         			}
         		}
         		
@@ -115,7 +119,7 @@ public class App extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-            	addingAnts = true;
+            	adding200Ants = true;
             	timeline.play();
             }
         });
@@ -130,20 +134,31 @@ public class App extends Application {
             }
         });
 		
-		Button addAntsBtn = new Button();
-		addAntsBtn.setText("Add 50 Ants");
-		addAntsBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button addAntsBtn1 = new Button();
+		addAntsBtn1.setText("Add 50 Ants");
+		addAntsBtn1.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-                addingAnts = true;
+                adding50Ants = true;
+            }
+        });
+		
+		Button addAntsBtn2 = new Button();
+		addAntsBtn2.setText("Add 200 Ants");
+		addAntsBtn2.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+                adding200Ants = true;
             }
         });
 		
         rightPanel.getChildren().add(genNodesBtn);
         rightPanel.getChildren().add(simluateWorldBtn);
         rightPanel.getChildren().add(addAntBtn);
-        rightPanel.getChildren().add(addAntsBtn);
+        rightPanel.getChildren().add(addAntsBtn1);
+        rightPanel.getChildren().add(addAntsBtn2);
         
         
 	}

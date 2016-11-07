@@ -7,8 +7,7 @@ public class Constants {
 	public static final int LINK_DISTANCE_INC = 50;
 	
 	public static final int MIN_PHEROMONE = 1;
-	public static final int START_PHEROMONE = 100;
-	public static final int PHEROMONE_DEC = 10;
-	public static final int PHEROMON_INC = 200;
-	public static final int PATH_LENGTH = 100;
+	public static final int START_PHEROMONE = 1;
+	public static final int PHEROMONE_DEC = 20;
+	public static final int PHEROMON_INC = 100;
 }
