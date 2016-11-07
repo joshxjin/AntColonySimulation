@@ -1,5 +1,5 @@
-# AntOptimisationAlgorithm
-This is a simple ant colony optimisation simulator writen in Java and JavaFX.
+# AntColonySimulation
+This is a simple ant colony simulator writen in Java and JavaFX.
 
 Run App.java, click on "Generate Nodes" to randomly generate a graph, with start node (red), target node (blue) and 20 intermediate nodes (beige), with each node randomly connected to its surrounding nodes based on the distance apart. Clicking "Generate Nodes" again will rereate a new simulation with new random nodes.
 
