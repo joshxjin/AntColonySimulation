@@ -39,7 +39,8 @@ public class App extends Application {
 	private Timeline timeline = new Timeline();
 	private EventHandler onFinished;
 	private Random r = new Random();
-	private int frame = 0;
+	private int counter = 0;
+	private boolean addingAnts = false;
 		
 	@Override
 	public void start(Stage primaryStage) {
@@ -61,14 +62,15 @@ public class App extends Application {
         onFinished = new EventHandler<ActionEvent>() {
         	public void handle(ActionEvent t) {
         		world.depreciatePheromone();
-        		/*
-        		frame++;
         		
-        		if (frame >= 30) {
-        			frame = 0;
-        			world.depreciatePheromone();
+        		if (addingAnts) {
+        			addAnt();
+        			counter++;
+        			if (counter >= 50) {
+        				counter = 0;
+        				addingAnts = false;
+        			}
         		}
-        		*/
         		
         		for (Ant ant: liveAntsList.keySet()) {
         			Circle circle = liveAntsList.get(ant);
@@ -107,34 +109,42 @@ public class App extends Application {
             }
         });
 		
+		Button simluateWorldBtn = new Button();
+		simluateWorldBtn.setText("Start Simluation");
+		simluateWorldBtn.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+            	addingAnts = true;
+            	timeline.play();
+            }
+        });
+		
 		Button addAntBtn = new Button();
 		addAntBtn.setText("Add Ant");
 		addAntBtn.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-                Ant ant = world.addAnt();
-                Circle circle = new Circle(ant.getCurrentNode().getX(), ant.getCurrentNode().getY(), 5, Color.BLACK);
-
-                liveAntsList.put(ant, circle);
-                centerPanel.getChildren().add(circle);
-                //animateAnt(ant);
+                addAnt();
             }
         });
 		
-		Button updateWorldBtn = new Button();
-		updateWorldBtn.setText("Update World");
-		updateWorldBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button addAntsBtn = new Button();
+		addAntsBtn.setText("Add 50 Ants");
+		addAntsBtn.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-            	animateAnts();
+                addingAnts = true;
             }
         });
-        
+		
         rightPanel.getChildren().add(genNodesBtn);
+        rightPanel.getChildren().add(simluateWorldBtn);
         rightPanel.getChildren().add(addAntBtn);
-        rightPanel.getChildren().add(updateWorldBtn);
+        rightPanel.getChildren().add(addAntsBtn);
+        
         
 	}
 	
@@ -166,6 +176,14 @@ public class App extends Application {
 		}
 	}
 	
+	public void addAnt() {
+		Ant ant = world.addAnt();
+        Circle circle = new Circle(ant.getCurrentNode().getX(), ant.getCurrentNode().getY(), 5, Color.BLACK);
+
+        liveAntsList.put(ant, circle);
+        centerPanel.getChildren().add(circle);
+	}
+	
 	/*public void animateAnts() {
 		ArrayList<KeyValue> antKeyValues = new ArrayList<KeyValue>();
 		
@@ -190,10 +208,6 @@ public class App extends Application {
         
 	}
 	*/
-	
-	public void animateAnts() {
-		timeline.play();
-	}
 
 	public static void main(String[] args) {
 		launch(args);
