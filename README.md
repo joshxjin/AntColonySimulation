@@ -6,3 +6,6 @@ Run App.java, click on "Generate Nodes" to randomly generate a graph, with start
 Start simulation will create initial 200 ants to start the simulation. To increase the number of ants, use "Add 50 ants" or "Add 200 ants".
 
 Over time there will be a convergent solution (not neccessary the most opitimal solution).
+
+
+![alt tag](https://github.com/joshxjin/AntColonySimulation/blob/master/UI.png)
