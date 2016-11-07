@@ -99,7 +99,7 @@ public class App extends Application {
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Timeline.INDEFINITE);
         
-        primaryStage.setTitle("Ant Optimisation Algorithm");
+        primaryStage.setTitle("Ant Colony Simluation");
         primaryStage.setScene(scene);
         primaryStage.show();
 	}
