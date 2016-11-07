@@ -3,6 +3,7 @@ package backend;
 public class Constants {
 	public static final int MIDDLE_NODES_NUMBER = 20; //number of nodes between start and end nodes
 	public static final int MIN_NODE_DISTANCE = 150; //minimum distance between nodes during node generation
+	public static final int NODE_BOUNDARY_LIMIT = 30;
 	public static final int LINK_DISTANCE = 270; //maximum distance to link 2 nodes when generation links/path
 	public static final int LINK_DISTANCE_INC = 50; //increment to increase max link distance if node is unable to generate a single path from base value
 	

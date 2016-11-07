@@ -24,7 +24,7 @@ import javafx.util.Duration;
 public class App extends Application {
 	final private int CANVAS_WIDTH = 900;
 	final private int CANVAS_HEIGHT = 800;
-	final private int RIGHT_PANEL_WIDTH = 200;
+	final private int RIGHT_PANEL_WIDTH = 100;
 	final private Duration DURATION = Duration.millis(33); //~30FPS
 
 	private Pane centerPanel;

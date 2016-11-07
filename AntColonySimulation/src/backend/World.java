@@ -18,9 +18,9 @@ public class World {
 	
 	
 	public void generateNodes() {
-		Node startNode = new Node(50, 50, "start");
+		Node startNode = new Node(Constants.NODE_BOUNDARY_LIMIT, Constants.NODE_BOUNDARY_LIMIT, "start");
 		nodeList.add(startNode);
-		Node endNode = new Node(worldWidth - 50, worldHeight - 50, "end");
+		Node endNode = new Node(worldWidth - Constants.NODE_BOUNDARY_LIMIT, worldHeight - Constants.NODE_BOUNDARY_LIMIT, "end");
 		nodeList.add(endNode);
 		
 		for (int i = 0; i < Constants.MIDDLE_NODES_NUMBER; i++) {
@@ -31,9 +31,9 @@ public class World {
 	}
 	
 	private void generateNextNode(String type) {
-		//node is atleast 30pixels from the edge of the display
-		int newX = r.nextInt(worldWidth - 60) + 30;
-		int newY = r.nextInt(worldHeight - 60) + 30;
+		//node is limited to set pixel from the edge of the display
+		int newX = r.nextInt(worldWidth - (Constants.NODE_BOUNDARY_LIMIT * 2)) + Constants.NODE_BOUNDARY_LIMIT;
+		int newY = r.nextInt(worldHeight - (Constants.NODE_BOUNDARY_LIMIT * 2)) + Constants.NODE_BOUNDARY_LIMIT;
 		Boolean validPosition = true;
 		for (Node node: nodeList) {
 			double distance = node.calculateDistance(newX, newY);
