@@ -62,7 +62,7 @@ public class App extends Application {
         		world.depreciatePheromone();
         		
         		//adding 1 ant per frame until counter reaches the correct ants number
-        		if (adding50Ants || adding200Ants) {
+        		if (adding50Ants || adding200Ants || startSimAnts) {
         			addAnt();
         			counter++;
         			if (adding50Ants && counter >= 50) {
