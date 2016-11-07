@@ -36,6 +36,7 @@ public class App extends Application {
 	private int counter = 0;
 	private boolean adding50Ants = false;
 	private boolean adding200Ants = false;
+	private boolean startSimAnts = false;
 	
 	private Button simluateWorldBtn, addAntsBtn1, addAntsBtn2;
 		
@@ -72,6 +73,11 @@ public class App extends Application {
         			} else if (adding200Ants && counter >= 200) {
         				counter = 0;
         				adding200Ants = false;
+        				addAntsBtn1.setDisable(false);
+                    	addAntsBtn2.setDisable(false);
+        			} else if (startSimAnts && counter >= 500) {
+        				counter = 0;
+        				startSimAnts = false;
         				addAntsBtn1.setDisable(false);
                     	addAntsBtn2.setDisable(false);
         			}
@@ -129,7 +135,7 @@ public class App extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-            	adding200Ants = true;
+            	startSimAnts = true;
             	simluateWorldBtn.setDisable(true);
             	timeline.play();
             }
