@@ -160,7 +160,7 @@ public class App extends Application {
 			else
 				centerPanel.getChildren().add(new Circle(node.getX(), node.getY(), 15, Color.SANDYBROWN));
 			
-			for (Node neighbour: node.getNeighbours()) {
+			for (Node neighbour: node.getNeighbours().keySet()) {
 				centerPanel.getChildren().add(new Line(node.getX(), node.getY(), neighbour.getX(), neighbour.getY()));
 			}
 		}

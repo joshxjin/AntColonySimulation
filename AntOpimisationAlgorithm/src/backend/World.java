@@ -60,9 +60,9 @@ public class World {
 		for (int i = 0; i < nodeList.size(); i++) {
 			Node node = nodeList.get(i);
 			for (Node neighbourNode: nodeList) {
-				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neighbours.contains(node)) {
-					node.neighbours.add(neighbourNode);
-					neighbourNode.neighbours.add(node);
+				if (!neighbourNode.equals(node) && neighbourNode.calculateDistance(node.x, node.y) <= linkDistance && !neighbourNode.neighbours.containsKey(node)) {
+					node.neighbours.put(neighbourNode, Constants.START_PHEROMONE);
+					neighbourNode.neighbours.put(node, Constants.START_PHEROMONE);
 				}
 			}
 			if (node.neighbours.isEmpty()) {
@@ -91,11 +91,26 @@ public class World {
 		}
 	}
 	
+	/*
 	public void depreciatePheromone() {
 		for (Node node: nodeList) {
 			node.pheromone -= Constants.PHEROMONE_DEC;
 			if (node.pheromone <= Constants.MIN_PHEROMONE) {
 				node.pheromone = Constants.MIN_PHEROMONE;
+			}
+		}
+	}
+	*/
+	
+	public void depreciatePheromone() {
+		for (Node node: nodeList) {
+			for (Node neighbourNode: node.getNeighbours().keySet()) {
+				Integer pheromone = node.getNeighbours().get(neighbourNode);
+				pheromone -= Constants.PHEROMONE_DEC;
+				if (pheromone <= Constants.MIN_PHEROMONE) {
+					pheromone = Constants.MIN_PHEROMONE;
+				}
+				node.getNeighbours().replace(neighbourNode, pheromone);
 			}
 		}
 	}
