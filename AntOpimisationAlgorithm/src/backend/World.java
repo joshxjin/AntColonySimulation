@@ -1,34 +1,29 @@
 package backend;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
 
 public class World {
 	public static ArrayList<Node> nodeList = new ArrayList<Node>();
 	public static ArrayList<Ant> antList = new ArrayList<Ant>();
 	
-	int worldWidth, worldHeight, numOfMiddleNodes;
+	int worldWidth, worldHeight;
 	
 	Random r = new Random();
 	
-	public World(int canvasWidth, int canvasHeight, int numOfMiddleNodes) {
+	public World(int canvasWidth, int canvasHeight) {
 		this.worldWidth = canvasWidth;
 		this.worldHeight = canvasHeight;
-		this.numOfMiddleNodes = numOfMiddleNodes;
 	}
 	
 	
 	public void generateNodes() {
-		nodeList.clear();
-		antList.clear();
-		
 		Node startNode = new Node(50, 50, "start");
 		nodeList.add(startNode);
 		Node endNode = new Node(worldWidth - 50, worldHeight - 50, "end");
 		nodeList.add(endNode);
 		
-		for (int i = 0; i < numOfMiddleNodes; i++) {
+		for (int i = 0; i < Constants.MIDDLE_NODES_NUMBER; i++) {
 			generateNextNode("middle");
 		}
 		
@@ -36,12 +31,13 @@ public class World {
 	}
 	
 	private void generateNextNode(String type) {
+		//node is atleast 30pixels from the edge of the display
 		int newX = r.nextInt(worldWidth - 60) + 30;
 		int newY = r.nextInt(worldHeight - 60) + 30;
 		Boolean validPosition = true;
 		for (Node node: nodeList) {
 			double distance = node.calculateDistance(newX, newY);
-			if (distance <= Constants.MIN_NODE_DISTANCE) {
+			if (distance <= Constants.MIN_NODE_DISTANCE) { //set a minimum distance between nodes
 				validPosition = false;
 				break;
 			}
@@ -56,6 +52,7 @@ public class World {
 	}
 	
 	private void generatePaths() {
+		//create links (path) between nodes based on Constants.LINK_DISTANCE
 		int linkDistance = Constants.LINK_DISTANCE;
 		for (int i = 0; i < nodeList.size(); i++) {
 			Node node = nodeList.get(i);
@@ -75,6 +72,7 @@ public class World {
 	}
 	
 	public Ant addAnt() {
+		//add ant to the world and return ant so frontend can create circle for the ant
 		Ant ant = new Ant(nodeList.get(0));
 		
 		antList.add(ant);
@@ -82,27 +80,8 @@ public class World {
 		return ant;
 	}
 	
-	
-	public void updateWorld() {
-		depreciatePheromone();
-		
-		for (Ant ant: antList) {
-			ant.move();
-		}
-	}
-	
-	/*
 	public void depreciatePheromone() {
-		for (Node node: nodeList) {
-			node.pheromone -= Constants.PHEROMONE_DEC;
-			if (node.pheromone <= Constants.MIN_PHEROMONE) {
-				node.pheromone = Constants.MIN_PHEROMONE;
-			}
-		}
-	}
-	*/
-	
-	public void depreciatePheromone() {
+		//decrease the pheromone of each node and set the minimum pheromone value
 		for (Node node: nodeList) {
 			for (Node neighbourNode: node.getNeighbours().keySet()) {
 				Integer pheromone = node.getNeighbours().get(neighbourNode);
@@ -113,6 +92,11 @@ public class World {
 				node.getNeighbours().replace(neighbourNode, pheromone);
 			}
 		}
+	}
+	
+	public void cleanUp() {
+		antList.clear();
+		nodeList.clear();
 	}
 	
 }

@@ -18,70 +18,37 @@ public class Ant {
 		this.path.push(currentNode);
 	}
 	
-	/*
 	public void move() {
-		if (returning) {
-			currentNode.pheromone += Constants.PHEROMON_INC;
-			currentNode = path.pop();
-			if (currentNode.type.equals("start")) {
-				path.push(currentNode);
-				returning = false;
-			}
-		} else {
-			int counter = 0;
-			for (Node node: currentNode.getNeighbours()) {
-				if (previousNode == null || !previousNode.equals(node) && !node.getType().equals("start")) {
-					counter += node.pheromone;
-				}
-			}
-			Random r = new Random();
-			System.out.println(counter);
-			int randNum = r.nextInt(counter + 1);
-			for (Node node: currentNode.getNeighbours()) {
-				if (previousNode == null || !previousNode.equals(node) && !node.getType().equals("start")) {
-					randNum -= node.pheromone;
-					if (randNum <= 0) {
-						previousNode = currentNode;
-						currentNode = node;
-						if (currentNode.type.equals("end")) {
-							returning = true;
-						}
-						path.push(currentNode);
-						return;
-					}
-				}
-			}
-		}
-	}
-	*/
-	
-	public void move() {
-		if (returning) {
+		if (returning) { //returning home, but popping off the stack of node path
 			previousNode = currentNode;
 			currentNode = path.pop();
-			int pheromone = currentNode.neighbours.get(previousNode) + Constants.PHEROMON_INC;
+			int pheromone = currentNode.neighbours.get(previousNode) + Constants.PHEROMON_INC; //putting down pheromone
 			currentNode.neighbours.put(previousNode, pheromone);
 			if (currentNode.type.equals("start")) {
 				path.push(currentNode);
 				returning = false;
 				previousNode = null;
 			}
-		} else {
+		} else { 
 			int counter = 0;
-			if (currentNode.getNeighbours().keySet().size() == 1) {
-				for (Node node: currentNode.getNeighbours().keySet()) {
-					previousNode = currentNode;
-					currentNode = node;
-					if (currentNode.type.equals("end")) {
-						returning = true;
-					} else {
-						path.push(currentNode);
-					}
-					return;
+			if (currentNode.getNeighbours().keySet().size() == 1 && !currentNode.type.equals("start")) { //applies to nodes that are dead ends (only have a return path)
+				Node tempNode = previousNode;
+				previousNode = currentNode;
+				currentNode = tempNode;
+				if (currentNode.type.equals("end")) {
+					returning = true;
+				} else {
+					path.push(currentNode);
 				}
+				return;
 			}
 			
-			for (Node node: currentNode.getNeighbours().keySet()) {
+			/*
+			 * add up all the pheromone values of all neighbour nodes (not including the previous node or starting node)
+			 * randomly generate a number of the sum of pheromones
+			 * move towards the neighbour node
+			 */
+			for (Node node: currentNode.getNeighbours().keySet()) { 
 				if (previousNode == null || !previousNode.equals(node) && !node.getType().equals("start")) {
 					counter += currentNode.getNeighbours().get(node);
 				}
